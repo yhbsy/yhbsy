@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>城乡互通 - 农产品与城市货物双向流通平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2E7D32',      // 自然绿
+                        secondary: '#8D6E63',    // 木色
+                        accent: '#FFB74D',       // 暖橙色
+                        neutral: '#F5F5F5',      // 浅灰底色
+                        'urban': '#3949AB',      // 城市蓝
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['"Noto Serif SC"', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .poem-card {
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            .poem-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            }
+            .section-fade {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+            .section-fade.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-neutral font-sans text-gray-800">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <i class="fa fa-truck text-primary text-2xl"></i>
+                <span class="text-xl font-bold text-primary">城乡互通</span>
+            </a>
+            
+            <!-- 桌面端导航 -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="font-medium hover:text-primary transition-colors">首页</a>
+                <a href="#farm-products" class="font-medium hover:text-primary transition-colors">山货进城</a>
+                <a href="#urban-goods" class="font-medium hover:text-urban transition-colors">城货到乡</a>
+                <a href="poetry.html" class="font-medium hover:text-secondary transition-colors">思创工坊</a>
+                <a href="#live" class="font-medium hover:text-accent transition-colors">直播关注</a>
+                <a href="#about" class="font-medium hover:text-gray-600 transition-colors">关于我们</a>
+                <a href="#contact" class="font-medium hover:text-primary transition-colors">联系我们</a>
+            </nav>
+            
+            <!-- 购物车按钮 -->
+            <div class="relative mr-4">
+                <button id="cart-btn" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-shopping-cart text-xl"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-primary text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">0</span>
+                </button>
+            </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <button id="menu-toggle" class="md:hidden p-2">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#home" class="py-2 hover:text-primary transition-colors">首页</a>
+                <a href="#farm-products" class="py-2 hover:text-primary transition-colors">山货进城</a>
+                <a href="#urban-goods" class="py-2 hover:text-urban transition-colors">城货到乡</a>
+                <a href="poetry.html" class="py-2 hover:text-secondary transition-colors">思创工坊</a>
+                <a href="#live" class="py-2 hover:text-accent transition-colors">直播关注</a>
+                <a href="#about" class="py-2 hover:text-gray-600 transition-colors">关于我们</a>
+                <a href="#contact" class="py-2 hover:text-primary transition-colors">联系我们</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区域 - 调整为紧凑尺寸 -->
+    <section id="home" class="pt-20 pb-10 min-h-[60vh] flex items-center relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://picsum.photos/id/15/1920/1080" alt="乡村与城市风光" class="w-full h-full object-cover opacity-20">
+        </div>
+        <div class="container mx-auto px-4 py-8 relative z-10">
+            <div class="max-w-3xl">
+                <h1 class="text-[clamp(2.5rem,6vw,4rem)] font-bold leading-tight text-shadow mb-6">
+                    山货进城 <span class="text-primary">•</span> 城货到乡<br>
+                    <span class="text-gray-600">架起城乡互通的桥梁</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-xl">
+                    我们穿梭于山野与城市之间，将最新鲜的农产品从大山深处带到城市餐桌，
+                    也将城市的物资送往乡村，同时记录沿途的山水诗意。
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#farm-products" class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl text-center">
+                        浏览山货
+                    </a>
+                    <a href="#urban-goods" class="bg-urban hover:bg-urban/90 text-white px-8 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl text-center">
+                        城货下乡
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#farm-products" class="text-primary/70 hover:text-primary">
+                <i class="fa fa-chevron-down text-2xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 山货进城 -->
+    <section id="farm-products" class="py-20 bg-white section-fade">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">山货进城</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">从大山深处到城市餐桌，我们精心挑选每一份农产品，保证新鲜与品质</p>
+            </div>
+            
+            <!-- 产品分类标签 -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="product-tab active px-6 py-2 rounded-full bg-primary text-white font-medium transition-colors" data-category="all">全部</button>
+                <button class="product-tab px-6 py-2 rounded-full bg-white hover:bg-gray-100 font-medium transition-colors" data-category="dried">干货</button>
+                <button class="product-tab px-6 py-2 rounded-full bg-white hover:bg-gray-100 font-medium transition-colors" data-category="vegetable">新鲜蔬菜</button>
+                <button class="product-tab px-6 py-2 rounded-full bg-white hover:bg-gray-100 font-medium transition-colors" data-category="oil">生态油</button>
+                <button class="product-tab px-6 py-2 rounded-full bg-white hover:bg-gray-100 font-medium transition-colors" data-category="wine">农家酒</button>
+            </div>
+            
+            <!-- 产品展示 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 干货类 -->
+                <div class="product-item card-hover bg-white rounded-xl overflow-hidden shadow-md" data-category="dried">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://picsum.photos/id/292/600/400" alt="白辣椒" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-5">
+                        <div class="text-xs text-gray-500 mb-1">干货</div>
+                        <h3 class="text-lg font-bold mb-2">农家白辣椒</h3>
+                        <p class="text-gray-600 text-sm mb-4">传统工艺制作，自然晾晒，香辣适中</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-primary">¥45</span>
+                            <button class="add-to-cart bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-full text-sm transition-colors" data-name="农家白辣椒" data-price="45" data-img="https://picsum.photos/id/292/600/400" data-category="干货">
+                                <i class="fa fa-shopping-cart mr-1"></i> 加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-item card-hover bg-white rounded-xl overflow-hidden shadow-md" data-category="dried">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://picsum.photos/id/139/600/400" alt="豆角干" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-5">
+                        <div class="text-xs text-gray-500 mb-1">干货</div>
+                        <h3 class="text-lg font-bold mb-2">日晒豆角干</h3>
+                        <p class="text-gray-600 text-sm mb-4">自然晾晒，保留原味，富含膳食纤维</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-primary">¥38</span>
+                            <button class="add-to-cart bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-full text-sm transition-colors" data-name="日晒豆角干" data-price="38" data-img="https://picsum.photos/id/139/600/400" data-category="干货">
+                                <i class="fa fa-shopping-cart mr-1"></i> 加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-item card-hover bg-white rounded-xl overflow-hidden shadow-md" data-category="dried">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://picsum.photos/id/118/600/400" alt="茄子干" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-5">
+                        <div class="text-xs text-gray-500 mb-1">干货</div>
+                        <h3 class="text-lg font-bold mb-2">手工茄子干</h3>
+                        <p class="text-gray-600 text-sm mb-4">传统配方，风味独特，下饭佳品</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-primary">¥42</span>
+                            <button class="add-to-cart bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-full text-sm transition-colors" data-name="手工茄子干" data-price="42" data-img="https://picsum.photos/id/118/600/400" data-category="干货">
+                                <i class="fa fa-shopping-cart mr-1"></i> 加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 新鲜蔬菜类 -->
+                <div class="product-item card-hover bg-white rounded-xl overflow-hidden shadow-md" data-category="vegetable">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://picsum.photos/id/1080/600/400" alt="辣椒" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-5">
+                        <div class="text-xs text-gray-500 mb-1">新鲜蔬菜</div>
+                        <h3 class="text-lg font-bold mb-2">高山辣椒</h3>
+                        <p class="text-gray-600 text-sm mb-4">自然生长，辣味醇厚，新鲜采摘</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-primary">¥12</span>
+                            <button class="add-to-cart bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-full text-sm transition-colors" data-name="高山辣椒" data-price="12" data-img="https://picsum.photos/id/1080/600/400" data-category="新鲜蔬菜">
+                                <i class="fa fa-shopping-cart mr-1"></i> 加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-item card-hover bg-white rounded-xl overflow-hidden shadow-md" data-category="vegetable">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://picsum.photos/id/292/600/400" alt="豆角" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-5">
+                        <div class="text-xs text-gray-500 mb-1">新鲜蔬菜</div>
+                        <h3 class="text-lg font-bold mb-2">有机豆角</h3>
+                        <p class="text-gray-600 text-sm mb-4">无农药种植，鲜嫩可口，营养丰富</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-primary">¥8</span>
+                            <button class="add-to-cart bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-full text-sm transition-colors" data-name="有机豆角" data-price="8" data-img="https://picsum.photos/id/292/600/400" data-category="新鲜蔬菜">
+                                <i class="fa fa-shopping-cart mr-1"></i> 加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生态油类 -->
+                <div class="product-item card-hover bg-white rounded-xl overflow-hidden shadow-md" data-category="oil">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://picsum.photos/id/431/600/400" alt="菜籽油" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-5">
+                        <div class="text-xs text-gray-500 mb-1">生态油</div>
+                        <h3 class="text-lg font-bold mb-2">压榨菜籽油</h3>
+                        <p class="text-gray-600 text-sm mb-4">传统压榨工艺，香味浓郁，营养健康</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-primary">¥85</span>
+                            <button class="add-to-cart bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-full text-sm transition-colors" data-name="压榨菜籽油" data-price="85" data-img="https://picsum.photos/id/431/600/400" data-category="生态油">
+                                <i class="fa fa-shopping-cart mr-1"></i> 加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 城货到乡 -->
+    <section id="urban-goods" class="py-20 bg-neutral section-fade">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">城货到乡</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">我们将城市优质商品带到乡村，方便乡亲们的生活</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 text-urban">我们能带去什么？</h3>
+                    <p class="text-gray-600 mb-6">
+                        每次下乡，我们都会根据乡亲们的需求，从城市采购各类生活物资，
+                        解决农村购物不便的问题，让乡村生活更加便捷舒适。
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-urban/10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-shopping-bag text-urban text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold mb-2">日用百货</h4>
+                            <p class="text-gray-600 text-sm">洗衣粉、肥皂、卫生纸等</p>
+                        </div>
+                        
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-urban/10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-graduation-cap text-urban text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold mb-2">学习用品</h4>
+                            <p class="text-gray-600 text-sm">文具、书籍、书包等</p>
+                        </div>
+                        
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-urban/10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-medkit text-urban text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold mb-2">常用药品</h4>
+                            <p class="text-gray-600 text-sm">感冒药、止痛药、创可贴等</p>
+                        </div>
+                        
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-urban/10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-television text-urban text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold mb-2">家电配件</h4>
+                            <p class="text-gray-600 text-sm">电池、灯泡、插座等</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <a href="#contact" class="inline-flex items-center bg-urban hover:bg-urban/90 text-white px-6 py-3 rounded-full font-medium transition-colors">
+                            提交您的需求
+                            <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <img src="https://picsum.photos/id/1059/800/600" alt="城市货物下乡" class="w-full h-auto rounded-xl shadow-lg">
+                    <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-lg shadow-md max-w-xs">
+                        <div class="flex items-start">
+                            <i class="fa fa-quote-left text-urban/30 text-3xl mr-3 mt-1"></i>
+                            <p class="text-gray-600 text-sm italic">
+                                "以前买个小东西都要走几里山路，现在好了，城里的货直接送到村口，太方便了！"
+                            </p>
+                        </div>
+                        <p class="text-right text-gray-500 text-sm mt-2">— 山里的王大爷</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 思创工坊预览 -->
+    <section id="poetry-preview" class="py-20 bg-white section-fade">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4 font-serif text-secondary">旅途诗词</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">行车途中，触景生情，用诗句记录大山的壮美与乡村的宁静</p>
+                <div class="w-16 h-1 bg-secondary mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <!-- 诗词卡片1 -->
+                <div class="poem-card bg-neutral rounded-xl overflow-hidden shadow-md">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/15/600/400" alt="山间晨雾" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">晨雾</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            青山隐雾中，<br>
+                            车行不见踪。<br>
+                            忽闻鸡犬吠，<br>
+                            方知有人家。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 于云雾山途中</p>
+                    </div>
+                </div>
+                
+                <!-- 诗词卡片2 -->
+                <div class="poem-card bg-neutral rounded-xl overflow-hidden shadow-md">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/110/600/400" alt="山村暮色" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">山村晚照</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            夕阳西下时，<br>
+                            炊烟袅袅升。<br>
+                            犬吠深巷里，<br>
+                            农家饭菜香。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 宿青山村</p>
+                    </div>
+                </div>
+                
+                <!-- 诗词卡片3 -->
+                <div class="poem-card bg-neutral rounded-xl overflow-hidden shadow-md">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/133/600/400" alt="货车运输" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">车行万里</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            方向盘在手，<br>
+                            征途无尽头。<br>
+                            城乡一线连，<br>
+                            货物载春秋。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 行车有感</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <a href="poetry.html" class="inline-flex items-center bg-secondary hover:bg-secondary/90 text-white px-8 py-3 rounded-full font-medium transition-colors">
+                    查看更多诗词
+                    <i class="fa fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- 直播关注 -->
+    <section id="live" class="py-20 bg-white section-fade">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">直播关注</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">跟随我的镜头，一起走进大山深处，感受乡村的魅力与纯真</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="relative">
+                    <div class="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden shadow-lg">
+                        <img src="https://picsum.photos/id/283/800/450" alt="直播预览" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                            <button class="w-16 h-16 bg-accent rounded-full flex items-center justify-center shadow-lg transform transition-transform hover:scale-110">
+                                <i class="fa fa-play text-white text-xl ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-md">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse mr-2"></div>
+                            <span class="font-medium">下次直播：明天 10:00</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-1">主题：采摘野生竹笋</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">关注我的直播间</h3>
+                    <p class="text-gray-600 mb-8">
+                        我会定期在抖音直播，带大家走进大山，了解农产品的生长环境和制作过程，
+                        也会分享城乡运输的日常和旅途见闻。扫码关注，不错过每一场精彩直播！
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div class="bg-white p-6 rounded-lg text-center">
+                            <div class="w-32 h-32 bg-white mx-auto mb-4 flex items-center justify-center p-2">
+                                <i class="fa fa-qrcode text-6xl text-gray-400"></i>
+                                <!-- 实际应用中这里会放抖音二维码图片 -->
+                            </div>
+                            <h4 class="font-bold mb-2">抖音关注</h4>
+                            <p class="text-gray-600 text-sm mb-3">抖音号：chenxianghulu</p>
+                            <a href="#" class="text-accent hover:text-accent/80 font-medium text-sm">
+                                点击打开抖音
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-lg text-center">
+                            <div class="w-32 h-32 bg-white mx-auto mb-4 flex items-center justify-center p-2">
+                                <i class="fa fa-weixin text-6xl text-green-500"></i>
+                                <!-- 实际应用中这里会放微信二维码图片 -->
+                            </div>
+                            <h4 class="font-bold mb-2">微信联系</h4>
+                            <p class="text-gray-600 text-sm mb-3">微信号：cxhulu2023</p>
+                            <a href="#" class="text-green-600 hover:text-green-700 font-medium text-sm">
+                                扫码添加好友
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 - 恢复到原来位置 -->
+    <section id="about" class="py-20 bg-neutral section-fade">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-6">关于我们</h2>
+                    <p class="text-gray-600 mb-6">
+                        多年来，我们坚持往返于山区与城市之间，不仅是货物的运输者，更是城乡文化的传播者。
+                        每一次行程，我们都小心翼翼地将大山的馈赠——新鲜的蔬菜、醇厚的茶油、地道的农家酒
+                        带给城市的朋友们。
+                    </p>
+                    <p class="text-gray-600 mb-6">
+                        同时，我们也将城市的生活物资带回乡村，方便乡亲们的生活。沿途的山川美景
+                        激发了我们对诗词的热爱，在运输途中，我们用诗句记录下大自然的鬼斧神工。
+                    </p>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex -space-x-2">
+                            <img src="https://picsum.photos/id/64/100/100" alt="团队成员" class="w-10 h-10 rounded-full border-2 border-white">
+                            <img src="https://picsum.photos/id/65/100/100" alt="团队成员" class="w-10 h-10 rounded-full border-2 border-white">
+                            <img src="https://picsum.photos/id/91/100/100" alt="团队成员" class="w-10 h-10 rounded-full border-2 border-white">
+                        </div>
+                        <p class="text-gray-600"><span class="font-bold">3+</span> 年城乡运输经验</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-4">
+                        <img src="https://picsum.photos/id/133/600/800" alt="运输农产品" class="rounded-lg shadow-md w-full h-64 object-cover">
+                        <img src="https://picsum.photos/id/177/600/400" alt="乡村风光" class="rounded-lg shadow-md w-full h-40 object-cover">
+                    </div>
+                    <div class="space-y-4 pt-8">
+                        <img src="https://picsum.photos/id/287/600/400" alt="城市送货" class="rounded-lg shadow-md w-full h-40 object-cover">
+                        <img src="https://picsum.photos/id/431/600/800" alt="农产品展示" class="rounded-lg shadow-md w-full h-64 object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section id="contact" class="py-20 bg-neutral section-fade">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-6">联系我们</h2>
+                    <p class="text-gray-600 mb-8">
+                        无论您想订购山里的农产品，还是需要从城市捎带货物到农村，
+                        都可以通过以下方式联系我们，我们会尽快回复您。
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="bg-primary/10 p-3 rounded-full mr-4">
+                                <i class="fa fa-phone text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-1">电话咨询</h3>
+                                <p class="text-gray-600">138-xxxx-5678</p>
+                                <p class="text-gray-500 text-sm">每天 6:00-20:00</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-primary/10 p-3 rounded-full mr-4">
+                                <i class="fa fa-weixin text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-1">微信联系</h3>
+                                <p class="text-gray-600">cxhulu2023</p>
+                                <p class="text-gray-500 text-sm">扫码添加，及时沟通</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="bg-white rounded-xl p-8 shadow-md">
+                        <h3 class="text-xl font-bold mb-6">发送消息</h3>
+                        <form>
+                            <div class="mb-4">
+                                <label for="name" class="block text-gray-700 mb-2">您的姓名</label>
+                                <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入您的姓名">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="phone" class="block text-gray-700 mb-2">联系电话</label>
+                                <input type="tel" id="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入您的电话">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="message-type" class="block text-gray-700 mb-2">消息类型</label>
+                                <select id="message-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <option value="">请选择消息类型</option>
+                                    <option value="buy-farm">购买农产品</option>
+                                    <option value="send-urban">捎带城市货物</option>
+                                    <option value="live">直播相关</option>
+                                    <option value="other">其他咨询</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label for="message" class="block text-gray-700 mb-2">您的留言</label>
+                                <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入您想咨询的内容"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-medium transition-colors">
+                                发送消息
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 购物车侧边栏 -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300">
+        <div class="h-full flex flex-col">
+            <div class="p-6 border-b flex justify-between items-center">
+                <h3 class="text-xl font-bold">购物车</h3>
+                <button id="close-cart" class="p-2 hover:bg-gray-100 rounded-full">
+                    <i class="fa fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-4">
+                <!-- 购物车为空时显示 -->
+                <div id="empty-cart" class="h-full flex flex-col items-center justify-center text-gray-500">
+                    <i class="fa fa-shopping-cart text-5xl mb-4 opacity-30"></i>
+                    <p>您的购物车还是空的</p>
+                    <p class="text-sm mt-2">快去添加喜欢的商品吧</p>
+                </div>
+                
+                <!-- 购物车项目将通过JS动态添加 -->
+            </div>
+            
+            <div class="p-6 border-t">
+                <div class="flex justify-between mb-4">
+                    <span class="font-medium">总计</span>
+                    <span id="cart-total" class="font-bold text-xl text-primary">¥0</span>
+                </div>
+                <button id="checkout-btn" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-medium transition-colors mb-3 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    结算
+                </button>
+                <button id="clear-cart" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg font-medium transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    清空购物车
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 遮罩层 -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 z-40 hidden transition-opacity duration-300"></div>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fa fa-truck text-primary text-2xl"></i>
+                        <span class="text-xl font-bold">城乡互通</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        架起城乡之间的桥梁，让优质农产品走进城市，
+                        让城市便利惠及乡村，促进城乡共同发展。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-weibo text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-weixin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-douyin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+                        <li><a href="#farm-products" class="text-gray-400 hover:text-white transition-colors">山货进城</a></li>
+                        <li><a href="#urban-goods" class="text-gray-400 hover:text-white transition-colors">城货到乡</a></li>
+                        <li><a href="poetry.html" class="text-gray-400 hover:text-white transition-colors">思创工坊</a></li>
+                        <li><a href="#live" class="text-gray-400 hover:text-white transition-colors">直播关注</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">联系我们</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">服务支持</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">购物指南</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">配送说明</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">预订流程</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">订阅更新</h4>
+                    <p class="text-gray-400 mb-4">
+                        订阅我们的消息，获取最新产品信息、直播预告和优惠活动
+                    </p>
+                    <form class="flex">
+                        <input type="email" placeholder="您的邮箱地址" class="px-4 py-2 rounded-l-lg w-full focus:outline-none text-gray-800">
+                        <button type="submit" class="bg-primary hover:bg-primary/90 px-4 py-2 rounded-r-lg transition-colors">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-gray-500 text-sm">
+                <p>© 2023 城乡互通. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300 z-30">
+        <i class="fa fa-chevron-up"></i>
+    </button>
+
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('py-2', 'shadow');
+                navbar.classList.remove('py-3');
+                
+                backToTop.classList.remove('opacity-0', 'invisible');
+                backToTop.classList.add('opacity-100', 'visible');
+            } else {
+                navbar.classList.add('py-3');
+                navbar.classList.remove('py-2', 'shadow');
+                
+                backToTop.classList.add('opacity-0', 'invisible');
+                backToTop.classList.remove('opacity-100', 'visible');
+            }
+            
+            // 滚动动画
+            const sections = document.querySelectorAll('.section-fade');
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (sectionTop < windowHeight * 0.75) {
+                    section.classList.add('active');
+                }
+            });
+        });
+        
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                // 关闭移动端菜单和购物车
+                mobileMenu.classList.add('hidden');
+                closeCart();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 返回顶部
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 产品分类标签切换
+        const productTabs = document.querySelectorAll('.product-tab');
+        const productItems = document.querySelectorAll('.product-item');
+        
+        productTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 移除所有标签的活跃状态
+                productTabs.forEach(t => {
+                    t.classList.remove('active', 'bg-primary', 'text-white');
+                    t.classList.add('bg-white', 'hover:bg-gray-100');
+                });
+                
+                // 添加当前标签的活跃状态
+                tab.classList.add('active', 'bg-primary', 'text-white');
+                tab.classList.remove('bg-white', 'hover:bg-gray-100');
+                
+                const category = tab.getAttribute('data-category');
+                
+                // 显示或隐藏对应分类的产品
+                productItems.forEach(item => {
+                    if (category === 'all' || item.getAttribute('data-category') === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // 购物车功能
+        const cartCount = document.getElementById('cart-count');
+        const cartTotal = document.getElementById('cart-total');
+        const cartItems = document.getElementById('cart-items');
+        const emptyCart = document.getElementById('empty-cart');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const overlay = document.getElementById('overlay');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const clearCartBtn = document.getElementById('clear-cart');
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const closeCartBtn = document.getElementById('close-cart');
+        const cartBtn = document.getElementById('cart-btn');
+        
+        let cart = [];
+        
+        // 更新购物车显示
+        function updateCart() {
+            // 更新购物车数量
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // 更新购物车总价
+            const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            cartTotal.textContent = `¥${totalPrice.toFixed(2)}`;
+            
+            // 清空购物车列表
+            while (cartItems.firstChild) {
+                if (cartItems.firstChild === emptyCart) break;
+                cartItems.removeChild(cartItems.firstChild);
+            }
+            
+            // 显示或隐藏空购物车提示
+            if (cart.length === 0) {
+                emptyCart.classList.remove('hidden');
+                checkoutBtn.disabled = true;
+                clearCartBtn.disabled = true;
+            } else {
+                emptyCart.classList.add('hidden');
+                checkoutBtn.disabled = false;
+                clearCartBtn.disabled = false;
+                
+                // 添加购物车项目
+                cart.forEach((item, index) => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'flex items-center justify-between pb-4 border-b';
+                    cartItem.innerHTML = `
+                        <div class="flex items-center">
+                            <img src="${item.img}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg mr-4">
+                            <div>
+                                <h4 class="font-medium">${item.name}</h4>
+                                <p class="text-gray-500 text-sm">${item.category}</p>
+                                <p class="text-primary font-bold">¥${item.price}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <button class="decrease-qty p-1 text-gray-500 hover:text-primary" data-index="${index}">
+                                <i class="fa fa-minus-circle"></i>
+                            </button>
+                            <span class="mx-3">${item.quantity}</span>
+                            <button class="increase-qty p-1 text-gray-500 hover:text-primary" data-index="${index}">
+                                <i class="fa fa-plus-circle"></i>
+                            </button>
+                        </div>
+                    `;
+                    cartItems.appendChild(cartItem);
+                });
+                
+                // 添加数量调整事件监听
+                document.querySelectorAll('.decrease-qty').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = parseInt(e.currentTarget.dataset.index);
+                        if (cart[index].quantity > 1) {
+                            cart[index].quantity--;
+                        } else {
+                            cart.splice(index, 1);
+                        }
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.increase-qty').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = parseInt(e.currentTarget.dataset.index);
+                        cart[index].quantity++;
+                        updateCart();
+                    });
+                });
+            }
+        }
+        
+        // 添加到购物车
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const name = button.dataset.name;
+                const price = parseFloat(button.dataset.price);
+                const img = button.dataset.img;
+                const category = button.dataset.category;
+                
+                // 检查商品是否已在购物车中
+                const existingItemIndex = cart.findIndex(item => item.name === name);
+                
+                if (existingItemIndex > -1) {
+                    // 商品已存在，增加数量
+                    cart[existingItemIndex].quantity++;
+                } else {
+                    // 商品不存在，添加到购物车
+                    cart.push({
+                        name,
+                        price,
+                        img,
+                        category,
+                        quantity: 1
+                    });
+                }
+                
+                // 更新购物车
+                updateCart();
+                
+                // 显示购物车
+                openCart();
+                
+                // 添加按钮动画
+                button.classList.add('bg-green-100', 'text-green-600');
+                button.innerHTML = '<i class="fa fa-check mr-1"></i> 已添加';
+                setTimeout(() => {
+                    button.classList.remove('bg-green-100', 'text-green-600');
+                    button.innerHTML = '<i class="fa fa-shopping-cart mr-1"></i> 加入购物车';
+                }, 1500);
+            });
+        });
+        
+        // 打开购物车
+        function openCart() {
+            cartSidebar.classList.remove('translate-x-full');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // 关闭购物车
+        function closeCart() {
+            cartSidebar.classList.add('translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        
+        // 打开购物车按钮
+        cartBtn.addEventListener('click', openCart);
+        
+        // 关闭购物车按钮
+        closeCartBtn.addEventListener('click', closeCart);
+        overlay.addEventListener('click', closeCart);
+        
+        // 清空购物车
+        clearCartBtn.addEventListener('click', () => {
+            cart = [];
+            updateCart();
+        });
+        
+        // 结算按钮
+        checkoutBtn.addEventListener('click', () => {
+            alert('跳转到结算页面');
+            // 实际应用中，这里会跳转到结算页面
+        });
+        
+        // 初始化购物车和滚动动画
+        window.addEventListener('load', () => {
+            updateCart();
+            
+            // 触发一次滚动事件以显示初始可见的元素
+            window.dispatchEvent(new Event('scroll'));
+        });
+    </script>
+</body>
+</html>

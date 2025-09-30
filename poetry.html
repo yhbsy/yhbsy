@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅途诗词 - 城乡互通</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2E7D32',      // 自然绿
+                        secondary: '#8D6E63',    // 木色
+                        accent: '#FFB74D',       // 暖橙色
+                        neutral: '#F5F5F5',      // 浅灰底色
+                        'urban': '#3949AB',      // 城市蓝
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['"Noto Serif SC"', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .poem-card {
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            .poem-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            }
+            .poem-card:hover img {
+                transform: scale(1.05);
+            }
+            .poem-image {
+                transition: transform 0.7s ease;
+            }
+            .section-divider {
+                position: relative;
+                height: 80px;
+                overflow: hidden;
+            }
+            .section-divider::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                height: 100%;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23F5F5F5' fill-opacity='1' d='M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,122.7C672,107,768,117,864,144C960,171,1056,213,1152,208C1248,203,1344,149,1392,122.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+                background-size: cover;
+                background-position: bottom;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-white font-sans text-gray-800">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2">
+                <i class="fa fa-truck text-primary text-2xl"></i>
+                <span class="text-xl font-bold text-primary">城乡互通</span>
+            </a>
+            
+            <!-- 桌面端导航 -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html#home" class="font-medium hover:text-primary transition-colors">首页</a>
+                <a href="index.html#farm-products" class="font-medium hover:text-primary transition-colors">山货进城</a>
+                <a href="index.html#urban-goods" class="font-medium hover:text-urban transition-colors">城货到乡</a>
+                <a href="poetry.html" class="font-medium text-secondary transition-colors">诗词创作</a>
+                <a href="index.html#live" class="font-medium hover:text-accent transition-colors">直播关注</a>
+                <a href="index.html#about" class="font-medium hover:text-gray-600 transition-colors">关于我们</a>
+                <a href="index.html#contact" class="font-medium hover:text-primary transition-colors">联系我们</a>
+            </nav>
+            
+            <!-- 购物车按钮 -->
+            <div class="relative mr-4">
+                <button id="cart-btn" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-shopping-cart text-xl"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-primary text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">0</span>
+                </button>
+            </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <button id="menu-toggle" class="md:hidden p-2">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="index.html#home" class="py-2 hover:text-primary transition-colors">首页</a>
+                <a href="index.html#farm-products" class="py-2 hover:text-primary transition-colors">山货进城</a>
+                <a href="index.html#urban-goods" class="py-2 hover:text-urban transition-colors">城货到乡</a>
+                <a href="poetry.html" class="py-2 text-secondary transition-colors">诗词创作</a>
+                <a href="index.html#live" class="py-2 hover:text-accent transition-colors">直播关注</a>
+                <a href="index.html#about" class="py-2 hover:text-gray-600 transition-colors">关于我们</a>
+                <a href="index.html#contact" class="py-2 hover:text-primary transition-colors">联系我们</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 诗词专区头部 -->
+    <section class="pt-24 pb-16 bg-secondary/10">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-[clamp(2rem,5vw,3rem)] font-bold font-serif mb-6 text-secondary">旅途诗词</h1>
+                <p class="text-gray-600 text-lg mb-8">
+                    行车于山野之间，见山川秀美，感天地辽阔，偶有所得，遂成小诗
+                </p>
+                <div class="w-20 h-1 bg-secondary mx-auto"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 诗词分类标签 -->
+    <section class="py-8 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center gap-3 md:gap-6">
+                <button class="poetry-tab active px-5 py-2 rounded-full bg-secondary text-white font-medium transition-colors" data-category="all">全部诗词</button>
+                <button class="poetry-tab px-5 py-2 rounded-full bg-gray-100 hover:bg-gray-200 font-medium transition-colors" data-category="mountains">山水风光</button>
+                <button class="poetry-tab px-5 py-2 rounded-full bg-gray-100 hover:bg-gray-200 font-medium transition-colors" data-category="countryside">乡村生活</button>
+                <button class="poetry-tab px-5 py-2 rounded-full bg-gray-100 hover:bg-gray-200 font-medium transition-colors" data-category="seasons">四季景色</button>
+                <button class="poetry-tab px-5 py-2 rounded-full bg-gray-100 hover:bg-gray-200 font-medium transition-colors" data-category="journey">旅途感悟</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 诗词专区介绍 -->
+    <section class="py-12 bg-neutral">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold mb-6 font-serif">诗与远方，都在路上</h2>
+                    <p class="text-gray-600 mb-6">
+                        多年来往返城乡之间，车轮滚滚，山路弯弯。途中所见，皆为美景；心中所感，皆成诗句。
+                        这些不成章法的文字，记录了山间的晨雾暮霞，乡村的鸡鸣犬吠，田野的春华秋实，
+                        也记录了一个普通人在平凡路途中的点滴感悟。
+                    </p>
+                    <p class="text-gray-600 mb-6">
+                        不求对仗工整，不求平仄协调，只愿用最朴素的语言，留住那些转瞬即逝的美好瞬间，
+                        分享大山深处的宁静与祥和。
+                    </p>
+                    <div class="flex items-center">
+                        <img src="https://picsum.photos/id/64/100/100" alt="诗人照片" class="w-16 h-16 rounded-full object-cover mr-4">
+                        <div>
+                            <h4 class="font-bold">陈师傅</h4>
+                            <p class="text-gray-600 text-sm">货车司机 · 诗词爱好者</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="https://picsum.photos/id/184/800/600" alt="山间道路" class="w-full h-auto rounded-xl shadow-lg">
+                    <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-lg shadow-md max-w-xs rotate-[-2deg]">
+                        <p class="text-gray-700 italic font-serif">
+                            "车轮碾过山路，<br>
+                            诗行写在心头。"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- 山水风光类诗词 -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 font-serif text-secondary">山水风光</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">青山绿水间，感受大自然的鬼斧神工</p>
+                <div class="w-16 h-1 bg-secondary mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 诗词卡片1 -->
+                <div class="poem-card bg-neutral rounded-xl overflow-hidden shadow-md" data-category="mountains">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/15/600/400" alt="山间晨雾" class="w-full h-full object-cover poem-image">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">晨雾</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            青山隐雾中，<br>
+                            车行不见踪。<br>
+                            忽闻鸡犬吠，<br>
+                            方知有人家。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 于云雾山途中</p>
+                    </div>
+                </div>
+                
+                <!-- 诗词卡片2 -->
+                <div class="poem-card bg-neutral rounded-xl overflow-hidden shadow-md" data-category="mountains">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/137/600/400" alt="山间溪流" class="w-full h-full object-cover poem-image">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">山溪</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            清泉石上流，<br>
+                            叮咚伴我行。<br>
+                            一路向东去，<br>
+                            终归入江海。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 见山溪有感</p>
+                    </div>
+                </div>
+                
+                <!-- 诗词卡片3 -->
+                <div class="poem-card bg-neutral rounded-xl overflow-hidden shadow-md" data-category="mountains">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/235/600/400" alt="山间竹林" class="w-full h-full object-cover poem-image">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">竹径</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            竹林深似海，<br>
+                            小径通幽处。<br>
+                            清风拂面过，<br>
+                            叶响如私语。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 过竹林村</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 乡村生活类诗词 -->
+    <section class="py-16 bg-neutral">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 font-serif text-secondary">乡村生活</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">淳朴的乡村，简单的生活，最是动人</p>
+                <div class="w-16 h-1 bg-secondary mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 诗词卡片1 -->
+                <div class="poem-card bg-white rounded-xl overflow-hidden shadow-md" data-category="countryside">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/110/600/400" alt="山村暮色" class="w-full h-full object-cover poem-image">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">山村晚照</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            夕阳西下时，<br>
+                            炊烟袅袅升。<br>
+                            犬吠深巷里，<br>
+                            农家饭菜香。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 宿青山村</p>
+                    </div>
+                </div>
+                
+                <!-- 诗词卡片2 -->
+                <div class="poem-card bg-white rounded-xl overflow-hidden shadow-md" data-category="countryside">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/287/600/400" alt="乡村集市" class="w-full h-full object-cover poem-image">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">乡村集市</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            每逢赶集日，<br>
+                            山村人如潮。<br>
+                            鸡鱼肉蛋菜，<br>
+                            叫卖声声高。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 绿水镇赶集</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 四季景色类诗词 -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 font-serif text-secondary">四季景色</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">春夏秋冬，四季轮回，各有风情</p>
+                <div class="w-16 h-1 bg-secondary mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 诗词卡片1 -->
+                <div class="poem-card bg-neutral rounded-xl overflow-hidden shadow-md" data-category="seasons">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/177/600/400" alt="山间野花" class="w-full h-full object-cover poem-image">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">春野</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            无名花自开，<br>
+                            寂寞吐芬芳。<br>
+                            不与春争艳，<br>
+                            独留一缕香。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 春日山路旁见野花</p>
+                    </div>
+                </div>
+                
+                <!-- 诗词卡片2 -->
+                <div class="poem-card bg-neutral rounded-xl overflow-hidden shadow-md" data-category="seasons">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/1080/600/400" alt="夏日辣椒" class="w-full h-full object-cover poem-image">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">夏红</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            夏日炎炎照，<br>
+                            辣椒挂满枝。<br>
+                            红似天边霞，<br>
+                            辣得人欢喜。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 夏日农家菜园</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 旅途感悟类诗词 -->
+    <section class="py-16 bg-neutral">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 font-serif text-secondary">旅途感悟</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">车行万里，感悟人生百态</p>
+                <div class="w-16 h-1 bg-secondary mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 诗词卡片1 -->
+                <div class="poem-card bg-white rounded-xl overflow-hidden shadow-md" data-category="journey">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/133/600/400" alt="货车运输" class="w-full h-full object-cover poem-image">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">车行万里</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            方向盘在手，<br>
+                            征途无尽头。<br>
+                            城乡一线连，<br>
+                            货物载春秋。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 行车有感</p>
+                    </div>
+                </div>
+                
+                <!-- 诗词卡片2 -->
+                <div class="poem-card bg-white rounded-xl overflow-hidden shadow-md" data-category="journey">
+                    <div class="h-52 overflow-hidden">
+                        <img src="https://picsum.photos/id/200/600/400" alt="山路弯弯" class="w-full h-full object-cover poem-image">
+                    </div>
+                    <div class="p-6 font-serif">
+                        <h3 class="text-xl font-bold mb-3">路与人生</h3>
+                        <p class="text-gray-700 mb-4 italic">
+                            山路多曲折，<br>
+                            人生亦如此。<br>
+                            不畏前路险，<br>
+                            方能至远方。
+                        </p>
+                        <p class="text-right text-gray-500 text-sm">—— 过险峻山路有感</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 诗词创作感悟 -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto bg-secondary/5 p-8 rounded-xl">
+                <h2 class="text-2xl font-bold mb-6 font-serif text-center">我的诗词之路</h2>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    我本是一个普通的货车司机，没读过多少书，更不懂什么诗词格律。只是多年来往返于城乡之间，
+                    见多了山间的美景，感受了太多淳朴的乡情，心中总有一些感触想表达出来。
+                </p>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    开始只是随手记在手机备忘录里，几句大白话，不成章法。后来慢慢尝试着押韵，
+                    学着用更简练的语言表达。这些不成诗的"诗"，是我对生活的记录，对自然的赞美，
+                    也是我与这个世界对话的方式。
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    有人说我的诗太直白，没有意境。但我觉得，最真实的感受，往往不需要华丽的辞藻。
+                    就像山间的泉水，清澈见底，才能滋润人心。
+                </p>
+                <div class="text-right mt-8">
+                    <p class="font-serif italic">—— 陈师傅</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fa fa-truck text-primary text-2xl"></i>
+                        <span class="text-xl font-bold">城乡互通</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        架起城乡之间的桥梁，让优质农产品走进城市，
+                        让城市便利惠及乡村，促进城乡共同发展。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-weibo text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-weixin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-douyin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html#home" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+                        <li><a href="index.html#farm-products" class="text-gray-400 hover:text-white transition-colors">山货进城</a></li>
+                        <li><a href="index.html#urban-goods" class="text-gray-400 hover:text-white transition-colors">城货到乡</a></li>
+                        <li><a href="poetry.html" class="text-gray-400 hover:text-white transition-colors">诗词创作</a></li>
+                        <li><a href="index.html#live" class="text-gray-400 hover:text-white transition-colors">直播关注</a></li>
+                        <li><a href="index.html#about" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li>
+                        <li><a href="index.html#contact" class="text-gray-400 hover:text-white transition-colors">联系我们</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">服务支持</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">购物指南</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">配送说明</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">预订流程</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">订阅更新</h4>
+                    <p class="text-gray-400 mb-4">
+                        订阅我们的消息，获取最新产品信息、直播预告和优惠活动
+                    </p>
+                    <form class="flex">
+                        <input type="email" placeholder="您的邮箱地址" class="px-4 py-2 rounded-l-lg w-full focus:outline-none text-gray-800">
+                        <button type="submit" class="bg-primary hover:bg-primary/90 px-4 py-2 rounded-r-lg transition-colors">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-gray-500 text-sm">
+                <p>© 2023 城乡互通. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300 z-30">
+        <i class="fa fa-chevron-up"></i>
+    </button>
+
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('py-2', 'shadow');
+                navbar.classList.remove('py-3');
+                
+                backToTop.classList.remove('opacity-0', 'invisible');
+                backToTop.classList.add('opacity-100', 'visible');
+            } else {
+                navbar.classList.add('py-3');
+                navbar.classList.remove('py-2', 'shadow');
+                
+                backToTop.classList.add('opacity-0', 'invisible');
+                backToTop.classList.remove('opacity-100', 'visible');
+            }
+        });
+        
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 诗词分类标签切换
+        const poetryTabs = document.querySelectorAll('.poetry-tab');
+        const poemItems = document.querySelectorAll('.poem-card');
+        
+        poetryTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 移除所有标签的活跃状态
+                poetryTabs.forEach(t => {
+                    t.classList.remove('active', 'bg-secondary', 'text-white');
+                    t.classList.add('bg-gray-100', 'hover:bg-gray-200');
+                });
+                
+                // 添加当前标签的活跃状态
+                tab.classList.add('active', 'bg-secondary', 'text-white');
+                tab.classList.remove('bg-gray-100', 'hover:bg-gray-200');
+                
+                const category = tab.getAttribute('data-category');
+                
+                // 显示或隐藏对应分类的诗词
+                poemItems.forEach(item => {
+                    if (category === 'all' || item.getAttribute('data-category') === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // 返回顶部
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 初始化
+        window.addEventListener('load', () => {
+            // 触发一次滚动事件
+            window.dispatchEvent(new Event('scroll'));
+        });
+    </script>
+</body>
+</html>
